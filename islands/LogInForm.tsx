@@ -5,7 +5,7 @@ const LogInForm: FunctionComponent = () => {
     <div className="register-container">
       <h2>Log In</h2>
       <form action="/login" method="post">
-        <input className="LoginEmailInput" name="LoginEmail" type="text">
+        <input className="LoginEmailInput" name="LoginEmail" type="email">
         </input>
         <input
           className="LoginPasswordInput"

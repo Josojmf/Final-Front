@@ -27,8 +27,12 @@ const Page = (props: PageProps) => {
           {videosData.map(function (video) {
             return (
               <div className="video">
-                <h1>{video.title}</h1>
-                <img src={video.thumbnail}></img>
+                <img className="VideoImage" src={video.thumbnail}></img>
+                <div className="video-info ">
+                  <h1>{video.title}</h1>
+                  <p>{video.description}</p>
+                  <p>{video.date}</p>
+                </div>
               </div>
             );
           })}
