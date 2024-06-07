@@ -5,6 +5,14 @@ import { setCookie } from "$std/http/cookie.ts";
 const ButtonLogOut: FunctionComponent = () => {
   function deleteCookie() {
     const headers = new Headers();
+
+    setCookie(headers, {
+      name: "auth",
+      value: "",
+      sameSite: "Lax",
+      domain: "",
+      path: "/",
+    });
     return new Response(null, {
       status: 303,
       headers: headers,
