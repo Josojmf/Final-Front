@@ -1,18 +1,9 @@
-import { Handlers, PageProps } from "$fresh/server.ts";
+import { Handlers } from "$fresh/server.ts";
 import jwt from "npm:jsonwebtoken";
 import { setCookie } from "$std/http/cookie.ts";
 import LogInForm from "../islands/LogInForm.tsx";
 
-type LoginPageData = {
-  error?: string;
-};
-
-export const handler: Handlers<LoginPageData> = {
-  GET: (req, ctx) => {
-    const url = new URL(req.url);
-    const error = url.searchParams.get("error") ?? undefined;
-    return ctx.render({ error });
-  },
+export const handler: Handlers = {
   POST: async (req: Request) => {
     const APIURL = Deno.env.get("API_URL") || "https://videoapp-api.deno.dev";
     const loginurl = APIURL + "/checkuser";
@@ -20,19 +11,46 @@ export const handler: Handlers<LoginPageData> = {
     const loginemail = form.get("LoginEmail")?.toString() || "";
     const loginpassword = form.get("LoginPassword")?.toString() || "";
     const url = new URL(req.url);
-    let errorMessage =
-      "No hemos podido iniciar sesión. Verifica tus datos e inténtalo nuevamente.";
-    try {
-      console.log(`[login] Attempting login for ${loginemail}`);
-      const response = await fetch(loginurl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: loginemail,
-          password: loginpassword,
-        }),
+    const response = await fetch(loginurl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: loginemail,
+        password: loginpassword,
+      }),
+    });
+    if (response.status == 200) {
+      const headers = new Headers();
+      const secret = Deno.env.get("JWT_SECRET") || "backup";
+      headers.set("location", "/videos");
+      const token = jwt.sign({ email: loginemail }, secret);
+      setCookie(headers, {
+        name: "auth",
+        value: token,
+        sameSite: "Lax",
+        domain: url.hostname,
+        path: "/",
+      });
+      return new Response(null, {
+        status: 303,
+        headers: headers,
+      });
+    } else {
+      const headers = new Headers();
+      setCookie(headers, {
+        name: "auth",
+        value: "",
+        sameSite: "Lax",
+        domain: url.hostname,
+        path: "/",
+        maxAge: 0,
+      });
+      headers.set("location", "/login");
+      return new Response(null, {
+        status: 303,
+        headers: headers,
       });
 
       if (response.ok) {
@@ -91,7 +109,7 @@ function Page({ data }: PageProps<LoginPageData>) {
   return (
     <main className="page page--auth">
       <div className="page__gradient" aria-hidden="true"></div>
-      <LogInForm errorMessage={data?.error} />
+      <LogInForm />
     </main>
   );
 }
