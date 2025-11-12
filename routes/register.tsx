@@ -1,11 +1,10 @@
-import { FreshContext, Handlers } from "$fresh/server.ts";
+import { Handlers } from "$fresh/server.ts";
 import jwt from "npm:jsonwebtoken";
 import { setCookie } from "$std/http/cookie.ts";
-import LogInForm from "../islands/LogInForm.tsx";
 import RegisterForm from "../islands/RegisterForm.tsx";
 
 export const handler: Handlers = {
-  POST: async (req: Request, ctx: FreshContext) => {
+  POST: async (req: Request) => {
     const APIURL = Deno.env.get("API_URL") || "https://videoapp-api.deno.dev";
     const loginurl = APIURL + "/register";
     const form = await req.formData();
@@ -17,16 +16,20 @@ export const handler: Handlers = {
 
     const response = await fetch(loginurl, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         email: email,
         password: password,
+        name: name,
       }),
     });
     if (response.status == 200) {
       const headers = new Headers();
       const secret = Deno.env.get("JWT_SECRET") || "backup";
       headers.set("location", "/videos");
-      const token = jwt.sign({ password }, secret);
+      const token = jwt.sign({ email }, secret);
       setCookie(headers, {
         name: "auth",
         value: token,
@@ -46,8 +49,9 @@ export const handler: Handlers = {
         sameSite: "Lax",
         domain: url.hostname,
         path: "/",
+        maxAge: 0,
       });
-      headers.set("location", "/login");
+      headers.set("location", "/register");
       return new Response(null, {
         status: 303,
         headers: headers,
@@ -57,9 +61,10 @@ export const handler: Handlers = {
 };
 function Page() {
   return (
-    <div>
-      <RegisterForm></RegisterForm>
-    </div>
+    <main className="page page--auth">
+      <div className="page__gradient" aria-hidden="true"></div>
+      <RegisterForm />
+    </main>
   );
 }
 export default Page;
