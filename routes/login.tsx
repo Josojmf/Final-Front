@@ -11,27 +11,60 @@ export const handler: Handlers = {
     const loginEmail = form.get("LoginEmail")?.toString() ?? "";
     const loginPassword = form.get("LoginPassword")?.toString() ?? "";
     const url = new URL(req.url);
-    const response = await fetch(loginurl, {
+    const error = url.searchParams.get("error") ?? undefined;
+    return ctx.render({ error });
+  },
+  POST: async (req: Request) => {
+    const url = new URL(req.url);
+    const apiUrl = Deno.env.get("API_URL") ?? "https://videoapp-api.deno.dev";
+    const loginUrl = `${apiUrl}/checkuser`;
+    const form = await req.formData();
+    const loginEmail = form.get("LoginEmail")?.toString() ?? "";
+    const loginPassword = form.get("LoginPassword")?.toString() ?? "";
+
+    if (!loginEmail || !loginPassword) {
+      console.warn("[login] Missing credentials in form submission");
+      return buildRedirect(url, AUTH_ERROR_GENERIC);
+    }
+
+    const attemptHeaders = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: loginemail,
-        password: loginpassword,
+        email: loginEmail,
+        password: loginPassword,
       }),
-    });
-    if (response.status == 200) {
+    } satisfies RequestInit;
+
+    try {
+      console.log(`[login] Attempting login for ${loginEmail}`);
+      const response = await fetch(loginUrl, attemptHeaders);
+
+      if (!response.ok) {
+        console.warn(
+          `[login] Authentication failed for ${loginEmail} with status ${response.status}`,
+        );
+        const errorMessage =
+          response.status === 401 || response.status === 404
+            ? AUTH_ERROR_INVALID
+            : AUTH_ERROR_SERVICE;
+        return buildRedirect(url, errorMessage);
+      }
+
+      console.log(`[login] Authentication succeeded for ${loginEmail}`);
       const headers = new Headers();
-      const secret = Deno.env.get("JWT_SECRET") || "backup";
+      const secret = Deno.env.get("JWT_SECRET") ?? "backup";
       headers.set("location", "/videos");
       const token = jwt.sign({ email: loginemail }, secret);
       setCookie(headers, {
         name: "auth",
         value: token,
         sameSite: "Lax",
-        domain: url.hostname,
         path: "/",
+        httpOnly: true,
+        secure: url.protocol === "https:",
       });
       return new Response(null, {
         status: 303,
