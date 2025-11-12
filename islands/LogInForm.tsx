@@ -1,6 +1,10 @@
 import { FunctionComponent } from "https://esm.sh/v128/preact@10.19.6/src/index.js";
 
-const LogInForm: FunctionComponent = () => {
+type LogInFormProps = {
+  errorMessage?: string;
+};
+
+const LogInForm: FunctionComponent<LogInFormProps> = ({ errorMessage }) => {
   return (
     <section className="auth-card" aria-labelledby="login-title">
       <div className="auth-card__glow" aria-hidden="true"></div>

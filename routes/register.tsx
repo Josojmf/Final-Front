@@ -34,8 +34,9 @@ export const handler: Handlers = {
         name: "auth",
         value: token,
         sameSite: "Lax",
-        domain: url.hostname,
         path: "/",
+        httpOnly: true,
+        secure: url.protocol === "https:",
       });
       return new Response(null, {
         status: 303,
@@ -47,7 +48,6 @@ export const handler: Handlers = {
         name: "auth",
         value: "",
         sameSite: "Lax",
-        domain: url.hostname,
         path: "/",
         maxAge: 0,
       });
