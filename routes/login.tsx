@@ -8,8 +8,8 @@ export const handler: Handlers = {
     const APIURL = Deno.env.get("API_URL") || "https://videoapp-api.deno.dev";
     const loginurl = APIURL + "/checkuser";
     const form = await req.formData();
-    const loginemail = form.get("LoginEmail")?.toString() || "";
-    const loginpassword = form.get("LoginPassword")?.toString() || "";
+    const loginEmail = form.get("LoginEmail")?.toString() ?? "";
+    const loginPassword = form.get("LoginPassword")?.toString() ?? "";
     const url = new URL(req.url);
     const response = await fetch(loginurl, {
       method: "POST",
@@ -113,4 +113,5 @@ function Page({ data }: PageProps<LoginPageData>) {
     </main>
   );
 }
+
 export default Page;
