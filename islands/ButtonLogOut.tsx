@@ -1,30 +1,13 @@
 import { FunctionComponent } from "https://esm.sh/v128/preact@10.19.6/src/index.js";
-import { setCookie } from "$std/http/cookie.ts";
-
 
 const ButtonLogOut: FunctionComponent = () => {
-  function deleteCookie() {
-    const headers = new Headers();
-
-    setCookie(headers, {
-      name: "auth",
-      value: "",
-      sameSite: "Lax",
-      domain: "",
-      path: "/",
-    });
-    return new Response(null, {
-      status: 303,
-      headers: headers,
-    });
-    
-  }
   return (
-    <div className="buttonLogOutContainer">
-      <button className="buttonLogOut" onClick={deleteCookie}>
-        LogOut
+    <form className="buttonLogOutContainer" method="post" action="/logout">
+      <button className="buttonLogOut" type="submit">
+        <span className="buttonLogOut__icon" aria-hidden="true">🚪</span>
+        <span className="buttonLogOut__label">Cerrar sesión</span>
       </button>
-    </div>
+    </form>
   );
 };
 export default ButtonLogOut;
