@@ -12,6 +12,11 @@ const LogInForm: FunctionComponent<LogInFormProps> = ({ errorMessage }) => {
         <h2 id="login-title">Bienvenido de nuevo</h2>
         <p>Ingresa tus credenciales para continuar inspirándote con nuevos videos.</p>
       </header>
+      {errorMessage && (
+        <div className="auth-card__error" role="alert">
+          <span aria-hidden="true">⚠️</span> {errorMessage}
+        </div>
+      )}
       <form className="auth-card__form" action="/login" method="post">
         <label className="auth-card__label" htmlFor="login-email">
           Correo electrónico
