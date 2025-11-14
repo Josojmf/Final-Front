@@ -33,7 +33,7 @@ interface LoginPageData {
 }
 
 export const handler: Handlers<LoginPageData> = {
-  GET: (req, ctx) => {
+  GET: (req: Request, ctx) => {
     const url = new URL(req.url);
     const error = url.searchParams.get("error") ?? undefined;
     return ctx.render({ error });
