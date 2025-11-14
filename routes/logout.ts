@@ -9,11 +9,9 @@ async function clearAuthCookie(req: Request) {
     name: "auth",
     value: "",
     path: "/",
+    domain: url.hostname,
     sameSite: "Lax",
     maxAge: 0,
-    httpOnly: true,
-    secure: url.protocol === "https:",
-    domain: url.hostname,
   });
 
   headers.set("location", "/login");

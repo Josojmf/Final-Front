@@ -1,32 +1,36 @@
-name: Deploy to Deno
-
+name: Deploy
 on:
   push:
-    branches:
-      - main
-
-permissions:
-  contents: read
-  id-token: write
+    branches: main
+  pull_request:
+    branches: main
 
 jobs:
   deploy:
+    name: Deploy
     runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write # Needed for auth with Deno Deploy
+      contents: read # Needed to clone the repository
+
     steps:
-      - name: Checkout repository
+      - name: Clone repository
         uses: actions/checkout@v4
 
-      - name: Set up Deno
-        uses: denoland/setup-deno@v1
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
         with:
-          deno-version: v1.x
+          deno-version: v2.x
 
-      - name: Generate Fresh manifest
-        run: deno task build
+      - name: Build step
+        run: "deno task build"
 
-      - name: Deploy
+      - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: ${{ secrets.DENO_PROJECT }}
-          entrypoint: main.ts
-          token: ${{ secrets.DENO_DEPLOY_TOKEN }}
+          project: "josmarafern-final-front-93"
+          entrypoint: "main.ts"
+          root: "."
+          
+          
