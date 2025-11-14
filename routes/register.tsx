@@ -50,8 +50,6 @@ export const handler: Handlers = {
         sameSite: "Lax",
         path: "/",
         maxAge: 0,
-        httpOnly: true,
-        secure: url.protocol === "https:",
       });
       headers.set("location", "/register");
       return new Response(null, {
