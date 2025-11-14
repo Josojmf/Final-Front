@@ -48,11 +48,6 @@ const LogInForm: FunctionComponent<LogInFormProps> = ({ errorMessage }) => {
         <button type="submit" className="auth-card__button">
           Iniciar sesión
         </button>
-        {errorMessage && (
-          <p role="alert" className="auth-card__error">
-            {errorMessage}
-          </p>
-        )}
         <p className="auth-card__support-text">
           ¿No tienes una cuenta?
           {" "}
