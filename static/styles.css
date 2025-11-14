@@ -140,6 +140,18 @@ a:focus {
   z-index: 1;
 }
 
+.auth-card__error {
+  position: relative;
+  padding: 0.875rem 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #fee;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  z-index: 1;
+}
+
 .auth-card__label {
   font-size: 0.95rem;
   font-weight: 600;
