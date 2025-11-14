@@ -83,7 +83,7 @@ export const handler: Handlers = {
       headers.set("location", "/login");
       return new Response(null, {
         status: 303,
-        headers: headers,
+        headers,
       });
 
       if (response.ok) {
