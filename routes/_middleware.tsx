@@ -24,14 +24,37 @@ export async function handler(req: Request, ctx: FreshContext<State>) {
     const resp = await ctx.next();
     return resp;
   }
+  if (ctx.route == "/api/videos" || ctx.route == "/toggle-favorite") {
+    const { auth } = getCookies(req.headers);
+    if (auth !== undefined) {
+      const jwt_secret = Deno.env.get("JWT_SECRET") || "backup";
+      try {
+        const payload = jwt.verify(auth, jwt_secret) as any;
+        if (payload) {
+          ctx.state.user = payload.email;
+          const resp = await ctx.next();
+          return resp;
+        }
+      } catch (_error) {
+        console.error("Invalid auth token received");
+      }
+    }
+    const headers = new Headers();
+    headers.set("location", "/login");
+    return new Response(null, {
+      status: 303,
+      headers,
+    });
+  }
   if (ctx.route == "/videos") {
     const { auth } = getCookies(req.headers);
 
     if (auth !== undefined) {
       const jwt_secret = Deno.env.get("JWT_SECRET") || "backup";
       try {
-        const payload = jwt.verify(auth, jwt_secret);
+        const payload = jwt.verify(auth, jwt_secret) as any;
         if (payload) {
+          ctx.state.user = payload.email;
           const resp = await ctx.next();
           return resp;
         }

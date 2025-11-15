@@ -1,13 +1,19 @@
 import { FunctionComponent } from "https://esm.sh/v128/preact@10.19.6/src/index.js";
 
-const RegisterForm: FunctionComponent = () => {
+const RegisterForm: FunctionComponent<{ errorMessage?: string }> = (
+  { errorMessage },
+) => {
   return (
     <section className="auth-card" aria-labelledby="register-title">
       <div className="auth-card__glow" aria-hidden="true"></div>
       <header className="auth-card__header">
         <h2 id="register-title">Crea tu cuenta</h2>
-        <p>Únete para guardar tus favoritos y recibir recomendaciones personalizadas.</p>
+        <p>
+          Únete para guardar tus favoritos y recibir recomendaciones
+          personalizadas.
+        </p>
       </header>
+      {errorMessage && <p className="auth-card__error">{errorMessage}</p>}
       <form className="auth-card__form" action="/register" method="post">
         <label className="auth-card__label" htmlFor="register-name">
           Nombre completo
@@ -62,8 +68,7 @@ const RegisterForm: FunctionComponent = () => {
           Crear cuenta
         </button>
         <p className="auth-card__support-text">
-          ¿Ya tienes una cuenta?
-          {" "}
+          ¿Ya tienes una cuenta?{" "}
           <a className="auth-card__link" href="/login">
             Inicia sesión
           </a>

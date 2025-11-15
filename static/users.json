@@ -1,0 +1,24 @@
+[
+  {
+    "name": "Admin",
+    "email": "admin@admin.com",
+    "password": "admin123",
+    "favorites": [
+      "dQw4w9WgXcQ"
+    ]
+  },
+  {
+    "name": "test",
+    "email": "test@test.com",
+    "password": "test@test.com",
+    "favorites": []
+  },
+  {
+    "name": "test2@test.com",
+    "email": "test2@test.com",
+    "password": "test2@test.com",
+    "favorites": [
+      "jNQXAC9IVRw"
+    ]
+  }
+]

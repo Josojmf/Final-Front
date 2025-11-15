@@ -36,7 +36,9 @@ const Video: FunctionComponent<VideoType> = ({
     })
     : "";
   const formattedDuration = formatDuration(duration);
-  const videoUrl = youtubeid ? `https://www.youtube.com/watch?v=${youtubeid}` : undefined;
+  const videoUrl = youtubeid
+    ? `https://www.youtube.com/watch?v=${youtubeid}`
+    : undefined;
 
   return (
     <article className="video-card">
@@ -50,10 +52,20 @@ const Video: FunctionComponent<VideoType> = ({
               className="video-card__thumbnail-link"
               aria-label={`Ver ${title} en YouTube`}
             >
-              <img className="video-card__thumbnail" src={thumbnail} alt={title} />
+              <img
+                className="video-card__thumbnail"
+                src={thumbnail}
+                alt={title}
+              />
             </a>
           )
-          : <img className="video-card__thumbnail" src={thumbnail} alt={title} />}
+          : (
+            <img
+              className="video-card__thumbnail"
+              src={thumbnail}
+              alt={title}
+            />
+          )}
         {formattedDuration && (
           <span className="video-card__duration">{formattedDuration}</span>
         )}
@@ -65,6 +77,12 @@ const Video: FunctionComponent<VideoType> = ({
           {formattedDate && <time dateTime={date}>{formattedDate}</time>}
         </header>
         <p className="video-card__description">{description}</p>
+        <form method="post" action="/toggle-favorite">
+          <input type="hidden" name="videoId" value={youtubeid} />
+          <button type="submit" className="video-card__cta video-card__fav">
+            {fav ? "❤️" : "🤍"}
+          </button>
+        </form>
         {videoUrl && (
           <a
             className="video-card__cta"

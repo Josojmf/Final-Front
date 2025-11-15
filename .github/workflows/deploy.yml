@@ -32,5 +32,3 @@ jobs:
           project: "josmarafern-final-front-93"
           entrypoint: "main.ts"
           root: "."
-          
-          

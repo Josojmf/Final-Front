@@ -6,14 +6,18 @@ import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $_middleware from "./routes/_middleware.tsx";
 import * as $api_joke from "./routes/api/joke.ts";
+import * as $api_videos from "./routes/api/videos.ts";
 import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $index from "./routes/index.tsx";
 import * as $login from "./routes/login.tsx";
+import * as $logout from "./routes/logout.ts";
 import * as $register from "./routes/register.tsx";
+import * as $toggle_favorite from "./routes/toggle-favorite.ts";
 import * as $videos from "./routes/videos.tsx";
 import * as $ButtonLogOut from "./islands/ButtonLogOut.tsx";
 import * as $LogInForm from "./islands/LogInForm.tsx";
 import * as $RegisterForm from "./islands/RegisterForm.tsx";
+import * as $VideosGrid from "./islands/VideosGrid.tsx";
 import { type Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -22,16 +26,20 @@ const manifest = {
     "./routes/_app.tsx": $_app,
     "./routes/_middleware.tsx": $_middleware,
     "./routes/api/joke.ts": $api_joke,
+    "./routes/api/videos.ts": $api_videos,
     "./routes/greet/[name].tsx": $greet_name_,
     "./routes/index.tsx": $index,
     "./routes/login.tsx": $login,
+    "./routes/logout.ts": $logout,
     "./routes/register.tsx": $register,
+    "./routes/toggle-favorite.ts": $toggle_favorite,
     "./routes/videos.tsx": $videos,
   },
   islands: {
     "./islands/ButtonLogOut.tsx": $ButtonLogOut,
     "./islands/LogInForm.tsx": $LogInForm,
     "./islands/RegisterForm.tsx": $RegisterForm,
+    "./islands/VideosGrid.tsx": $VideosGrid,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;
